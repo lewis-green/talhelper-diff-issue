@@ -1,0 +1,65 @@
+version: v1alpha1
+debug: false
+persist: true
+machine:
+  type: worker
+  token: mhwm06.ewr9heckndy8q5ng
+  ca:
+    crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJQekNCOHFBREFnRUNBaEVBZ0xKSW5RLzNNMFp6citUSzlTdjl3akFGQmdNclpYQXdFREVPTUF3R0ExVUUKQ2hNRmRHRnNiM013SGhjTk1qTXhNakF4TVRNd056VTRXaGNOTXpNeE1USTRNVE13TnpVNFdqQVFNUTR3REFZRApWUVFLRXdWMFlXeHZjekFxTUFVR0F5dGxjQU1oQU5HL055TEJXOCtVZHE0QkZKQjNrSHlGUFZ6MXlUMDlMd092CjMxWkpSTzlvbzJFd1h6QU9CZ05WSFE4QkFmOEVCQU1DQW9Rd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3RUcKQ0NzR0FRVUZCd01DTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRkR5NWY4M2FDeVVjK3VudwpwYVNtY2ZoV3Nad2RNQVVHQXl0bGNBTkJBTDgwejc5VnRmMEJObXVzRndQcU1IWFVoWXMvdjY3WG5pVUtSdGlVCktaYUtHRVo5RmVOOFdLazZKb2swZTR0bmlPRVdzUkJBY0tlcFdUbWt4L2ZIVGdVPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    key: ""
+  certSANs:
+    - 192.168.200.10
+  kubelet:
+    image: ghcr.io/siderolabs/kubelet:v1.27.0
+    extraArgs:
+      feature-gates: GracefulNodeShutdown=false,MixedProtocolLBService=false
+      rotate-server-certificates: "true"
+    defaultRuntimeSeccompProfileEnabled: true
+    disableManifestsDirectory: true
+  network:
+    hostname: kworker1
+    interfaces:
+      - interface: eth1
+        addresses:
+          - 192.168.200.13/24
+        routes:
+          - network: ""
+            gateway: 192.168.200.1
+          - network: 0.0.0.0/0
+            gateway: ""
+  install:
+    disk: /dev/sdb
+    image: factory.talos.dev/installer/2d61dd07b20062062ea671b4d01873506103b67c0f7a4c3fb6cf4ee85585dcb8:v1.5.0-alpha.3
+    wipe: false
+  env:
+    GRPC_GO_LOG_SEVERITY_LEVEL: error
+  features:
+    rbac: true
+    stableHostname: true
+    apidCheckExtKeyUsage: true
+    diskQuotaSupport: true
+cluster:
+  id: nMdA5bOp70n2J05AcXlVFL4s634U4OrpeP_jV9U4Jzk=
+  secret: 7J7xSpM7dN5K4ZT6kPmajO7WMqBYUuqD9qpvhpS5vP8=
+  controlPlane:
+    endpoint: https://192.168.200.10:6443
+  network:
+    cni:
+      name: custom
+      urls:
+        - https://raw.githubusercontent.com/bjw-s/home-ops/main/infrastructure/talos/cluster-0/cni/install.yaml
+    dnsDomain: clusterworld.com
+    podSubnets:
+      - 10.244.0.0/16
+    serviceSubnets:
+      - 10.96.0.0/12
+  token: 0db1j9.01xh4wqnr6zda39u
+  ca:
+    crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJpVENDQVMrZ0F3SUJBZ0lRS3I4VlV5d1ZOUHovSCtSVUhJam5rVEFLQmdncWhrak9QUVFEQWpBVk1STXcKRVFZRFZRUUtFd3ByZFdKbGNtNWxkR1Z6TUI0WERUSXpNVEl3TVRFek1EYzFPRm9YRFRNek1URXlPREV6TURjMQpPRm93RlRFVE1CRUdBMVVFQ2hNS2EzVmlaWEp1WlhSbGN6QlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VICkEwSUFCTk1nNCtZeGNLMXdBYTROcC80d2xUb1F5RHBwLzJsdDVhZytvcTg3QzRFdzh2QW14TTkyWkhTVWFQanIKR3ZuOEErUkhydEY2dUk2ZGJFTll0KzkxK3pDallUQmZNQTRHQTFVZER3RUIvd1FFQXdJQ2hEQWRCZ05WSFNVRQpGakFVQmdnckJnRUZCUWNEQVFZSUt3WUJCUVVIQXdJd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBZEJnTlZIUTRFCkZnUVVRaSsrSUdmaE1LQzlGOVAxN1MyTXVrR0Fmb2d3Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUlnWFh2VWtOV3EKN2FIc2ZRSm00VVBhQmpubE0rUWpZdjlWbVg4ZFBxMDlMNnNDSVFDUmJGWGE1NGFaUWhjMk4rLzJ6cS9QNTVYMgpLbi9NSUJXTzJ6bjVPd21Gemc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    key: ""
+  discovery:
+    enabled: true
+    registries:
+      kubernetes:
+        disabled: true
+      service: {}
